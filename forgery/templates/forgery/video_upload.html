@@ -1,0 +1,23 @@
+{% extends 'forgery/base.html' %}
+
+{% block title %}Video Forgery Detection | Multimedia Manipulation Detection{% endblock %}
+
+{% block content %}
+<a href="{% url 'forgery:home' %}" class="back-link">← Back to Dashboard</a>
+
+<div class="upload-container">
+    <div class="upload-header">
+        <h1>Video Forgery <span class="highlight">Detection</span></h1>
+        <p>Upload a video file (MP4, AVI, etc.) to detect frame duplication, spatial inconsistency, copy-move artifacts, and compression manipulation.</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="cyber-form" style="border-top-color: var(--accent-indigo);">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.video.id_for_label }}">Select Video File</label>
+            {{ form.video }}
+        </div>
+        <button type="submit" class="btn-glow" style="--gradient-primary: linear-gradient(135deg, var(--accent-indigo), var(--accent-purple));">Run Deep Analysis</button>
+    </form>
+</div>
+{% endblock %}

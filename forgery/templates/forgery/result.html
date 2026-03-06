@@ -1,0 +1,76 @@
+{% extends 'forgery/base.html' %}
+
+{% block title %}Image Analysis Result | Multimedia Manipulation Detection{% endblock %}
+
+{% block content %}
+<a href="{% url 'forgery:image_upload' %}" class="back-link">← Analyze Another Image</a>
+
+<div class="results-container">
+    <div class="upload-header">
+        <h1>Analysis <span class="highlight">Result</span></h1>
+        <p>Deep scan completed for file: <strong>{{ filename }}</strong></p>
+    </div>
+
+    <div class="cards-grid">
+        <!-- Detection Summary -->
+        <div class="glass-card" style="grid-column: 1 / -1;">
+            <h2>Detection Summary</h2>
+            <div class="analysis-data">
+                <div class="result-item">
+                    <span class="result-label">Double JPEG Compression</span>
+                    <span class="result-value badge {% if double_compressed %}forged{% else %}safe{% endif %}">
+                        {% if double_compressed %}Detected{% else %}Clear{% endif %}
+                    </span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Noise Inconsistency</span>
+                    <span class="result-value badge {% if noise_forgery %}suspicious{% else %}safe{% endif %}">
+                        {% if noise_forgery %}Detected (Suspicious){% else %}Clear{% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-grid">
+        <!-- Media Visuals -->
+        <div class="media-column">
+            <div class="data-card">
+                <h3>Original Image</h3>
+                <div class="media-preview">
+                    <img src="{{ upload_url }}" alt="Uploaded Original" />
+                </div>
+            </div>
+            
+            <div class="data-card" style="margin-top: 2rem;">
+                <h3>Copy-Move Forensics Map</h3>
+                <div class="media-preview">
+                    {% if forgery_url %}
+                        <img src="{{ forgery_url }}" alt="Detected Forgery Overlay" />
+                        <p style="margin-top: 1rem; color: #f87171; font-weight: 500;">Anomaly Detected</p>
+                    {% else %}
+                        <p style="margin-top: 1rem; color: #34d399; font-weight: 500;">No spatial forgery anomalies found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- EXIF Data -->
+        <div class="data-card" style="height: fit-content;">
+            <h3>EXIF Meta Data</h3>
+            <div class="analysis-data">
+                {% if exif %}
+                    {% for k,v in exif.items %}
+                    <div class="result-item" style="padding: 0.5rem 0;">
+                        <span class="result-label" style="font-size: 0.9rem;">{{ k }}</span>
+                        <span class="result-value" style="font-size: 0.9rem; word-break: break-all; max-width: 60%; text-align: right;">{{ v }}</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: var(--text-muted); text-align: center; padding: 2rem 0;">No EXIF metadata found or data was stripped.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

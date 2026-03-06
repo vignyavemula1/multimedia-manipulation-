@@ -1,0 +1,136 @@
+{% extends 'forgery/base.html' %}
+
+{% block title %}Video Analysis Result | Multimedia Manipulation Detection{% endblock %}
+
+{% block content %}
+<a href="{% url 'forgery:video_upload' %}" class="back-link">← Analyze Another Video File</a>
+
+<div class="results-container">
+    <div class="upload-header">
+        <h1>Video <span class="highlight">Forensics Report</span></h1>
+    </div>
+
+    {% if error %}
+    <div class="glass-card" style="border-color: rgba(239, 68, 68, 0.4);">
+        <h2 style="color: #f87171;">Processing Error</h2>
+        <p>{{ error }}</p>
+        {% if filename %}<p style="margin-top: 1rem; color: var(--text-muted);">File: {{ filename }}</p>{% endif %}
+    </div>
+    {% else %}
+    
+    <div class="glass-card" style="margin-bottom: 2rem;">
+        <h2 style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+            Overall Verdict:
+            <span class="badge {% if results.overall_verdict == 'LIKELY FORGED' %}forged{% elif results.overall_verdict == 'SUSPICIOUS' %}suspicious{% else %}safe{% endif %}" style="font-size: 1.25rem; padding: 0.5rem 1rem;">
+                {{ results.overall_verdict }}
+            </span>
+        </h2>
+        <p>Analyzed File: <strong>{{ filename }}</strong></p>
+    </div>
+
+    <div class="results-grid">
+        <div class="media-column">
+            <div class="data-card">
+                <h3>Detection Metrics</h3>
+                <div class="analysis-data">
+                    {% if results.frame_duplication %}
+                    <div class="result-item">
+                        <span class="result-label">Frame Duplication</span>
+                        <div style="text-align: right;">
+                            <span class="result-value badge {% if results.frame_duplication.has_duplicates %}forged{% else %}safe{% endif %}">
+                                {% if results.frame_duplication.has_duplicates %}Detected{% else %}Clear{% endif %}
+                            </span>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Rate: {{ results.frame_duplication.percentage|floatformat:2 }}%</div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if results.inter_frame_forgery %}
+                    <div class="result-item">
+                        <span class="result-label">Inter-Frame Forgery</span>
+                        <div style="text-align: right;">
+                            <span class="result-value badge {% if results.inter_frame_forgery.is_forged %}suspicious{% else %}safe{% endif %}">
+                                {% if results.inter_frame_forgery.is_forged %}Detected{% else %}Clear{% endif %}
+                            </span>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Score: {{ results.inter_frame_forgery.score|floatformat:2 }}%</div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if results.copy_move_detection %}
+                    <div class="result-item">
+                        <span class="result-label">Copy-Move Artifacts</span>
+                        <div style="text-align: right;">
+                            <span class="result-value badge {% if results.copy_move_detection.has_forgery %}forged{% else %}safe{% endif %}">
+                                {% if results.copy_move_detection.has_forgery %}Detected{% else %}Clear{% endif %}
+                            </span>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Rate: {{ results.copy_move_detection.percentage|floatformat:2 }}%</div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if results.double_compression %}
+                    <div class="result-item">
+                        <span class="result-label">Double Compression</span>
+                        <div style="text-align: right;">
+                            <span class="result-value badge {% if results.double_compression.is_detected %}suspicious{% else %}safe{% endif %}">
+                                {% if results.double_compression.is_detected %}Detected{% else %}Clear{% endif %}
+                            </span>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Confidence: {{ results.double_compression.confidence|floatformat:2 }}%</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if results.noise_consistency %}
+                    <div class="result-item">
+                        <span class="result-label">Noise Consistency</span>
+                        <div style="text-align: right;">
+                            <span class="result-value badge {% if results.noise_consistency.is_inconsistent %}suspicious{% else %}safe{% endif %}">
+                                {% if results.noise_consistency.is_inconsistent %}Inconsistent{% else %}Consistent{% endif %}
+                            </span>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Score: {{ results.noise_consistency.score|floatformat:2 }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if results.frame_rate_anomalies %}
+                    <div class="result-item">
+                        <span class="result-label">Frame Rate Anomalies</span>
+                        <div style="text-align: right;">
+                            <span class="result-value badge {% if results.frame_rate_anomalies.has_anomalies %}suspicious{% else %}safe{% endif %}">
+                                {% if results.frame_rate_anomalies.has_anomalies %}Detected{% else %}Clear{% endif %}
+                            </span>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Score: {{ results.frame_rate_anomalies.score|floatformat:2 }}</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if upload_url %}
+            <div class="data-card" style="margin-top: 2rem;">
+                <h3>Source Video</h3>
+                <div class="media-preview">
+                    <video controls src="{{ upload_url }}" style="width: 100%; border-radius: 8px; outline: none;"></video>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if results.metadata %}
+        <div class="data-card" style="height: fit-content;">
+            <h3>Video Meta Data</h3>
+            <div class="analysis-data">
+                {% for k, v in results.metadata.items %}
+                <div class="result-item" style="padding: 0.5rem 0;">
+                    <span class="result-label" style="font-size: 0.9rem;">{{ k }}</span>
+                    <span class="result-value" style="font-size: 0.9rem; word-break: break-all; max-width: 60%; text-align: right;">{{ v }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

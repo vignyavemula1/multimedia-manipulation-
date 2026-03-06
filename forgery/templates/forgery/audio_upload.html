@@ -1,0 +1,23 @@
+{% extends 'forgery/base.html' %}
+
+{% block title %}Audio Forgery Detection | Multimedia Manipulation Detection{% endblock %}
+
+{% block content %}
+<a href="{% url 'forgery:home' %}" class="back-link">← Back to Dashboard</a>
+
+<div class="upload-container">
+    <div class="upload-header">
+        <h1>Audio Forgery <span class="highlight">Detection</span></h1>
+        <p>Upload an audio file (WAV, MP3) for deep structural analysis including splicing, clipping, resampling anomalies, and advanced compression forensics.</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="cyber-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.audio.id_for_label }}">Select Audio File</label>
+            {{ form.audio }}
+        </div>
+        <button type="submit" class="btn-glow" style="--gradient-primary: linear-gradient(135deg, var(--accent-blue), #2563eb);">Run Deep Analysis</button>
+    </form>
+</div>
+{% endblock %}

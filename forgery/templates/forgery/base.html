@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Multimedia Manipulation Detection{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'forgery/style.css' %}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Abstract Background Elements -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <header class="glass-header">
+        <div class="header-container">
+            <a href="{% url 'forgery:home' %}" class="logo">
+                <span class="logo-icon">🔍</span>
+                <span class="logo-text">Multimedia <span class="highlight">Manipulation Detection</span></span>
+            </a>
+            <nav class="nav-links">
+                <a href="{% url 'forgery:home' %}" class="nav-link">Home</a>
+                <a href="{% url 'forgery:image_upload' %}" class="nav-link">Image</a>
+                <a href="{% url 'forgery:audio_upload' %}" class="nav-link">Audio</a>
+                <a href="{% url 'forgery:video_upload' %}" class="nav-link">Video</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="glass-footer">
+        <p>&copy; {% now "Y" %} Multimedia Manipulation Detection. Advanced Multimedia Analysis.</p>
+    </footer>
+</body>
+</html>

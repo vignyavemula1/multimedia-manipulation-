@@ -1,0 +1,45 @@
+{% extends 'forgery/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="hero">
+    <h1>Advanced <span class="highlight">Multimedia Forensics</span></h1>
+    <p>Professional-grade analysis tools to detect forgery, manipulation, and artifacts in images, audio, and video files.</p>
+</div>
+
+<div class="cards-grid">
+    <div class="glass-card">
+        <div class="card-icon-wrap">🖼️</div>
+        <h2>Image Detection</h2>
+        <p>Comprehensive analysis including Error Level, CFA artifacts, Copy-Move detection, Noise Inconsistency, and EXIF metadata.</p>
+        <a href="{% url 'forgery:image_upload' %}" class="card-link">Analyze Image</a>
+    </div>
+
+    <div class="glass-card">
+        <div class="card-icon-wrap">🎙️</div>
+        <h2>Audio Detection</h2>
+        <p>Advanced spectral analysis detecting splicing, clipping, resampling anomalies, and deepfake audio manipulation.</p>
+        <a href="{% url 'forgery:audio_upload' %}" class="card-link">Analyze Audio</a>
+    </div>
+
+    <div class="glass-card">
+        <div class="card-icon-wrap">🎬</div>
+        <h2>Video Detection</h2>
+        <p>Frame-by-frame analysis identifying frame duplication, copy-move artifacts, and spatial compression discrepancies.</p>
+        <a href="{% url 'forgery:video_upload' %}" class="card-link">Analyze Video</a>
+    </div>
+</div>
+
+<script>
+    // Add mouse tracking for glass card hover effect
+    document.querySelectorAll('.glass-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+</script>
+{% endblock %}

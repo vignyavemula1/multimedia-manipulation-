@@ -1,0 +1,23 @@
+{% extends 'forgery/base.html' %}
+
+{% block title %}Image Forgery Detection | Multimedia Manipulation Detection{% endblock %}
+
+{% block content %}
+<a href="{% url 'forgery:home' %}" class="back-link">← Back to Dashboard</a>
+
+<div class="upload-container">
+    <div class="upload-header">
+        <h1>Image Forgery <span class="highlight">Detection</span></h1>
+        <p>Upload an image to perform deep analysis for compression artifacts, copy-move duplication, noise inconsistencies, and EXIF manipulation.</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="cyber-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.image.id_for_label }}">Select Image File</label>
+            {{ form.image }}
+        </div>
+        <button type="submit" class="btn-glow">Run Deep Analysis</button>
+    </form>
+</div>
+{% endblock %}
