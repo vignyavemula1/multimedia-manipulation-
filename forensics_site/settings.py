@@ -15,6 +15,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'cors.middleware.cors.headers',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -38,3 +39,4 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+CORS_ALLOW_ALL_ORIGINS = https://multimedia-manipulation.onrender.com
