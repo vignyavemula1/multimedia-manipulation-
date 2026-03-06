@@ -9,6 +9,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CORS_ALLOWED_ORIGINS = [
+    "https://multimedia-manipulation.onrender.com",
+]
+
 INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'forgery',
@@ -39,4 +43,3 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-CORS_ALLOW_ALL_ORIGINS = https://multimedia-manipulation.onrender.com
